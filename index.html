@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run result · 多路径分析报告</title>
+    <!-- 简洁样式，适合GitHub展示 -->
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #f5f7fa;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            padding: 2rem 1.5rem;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 35px -8px rgba(0,0,0,0.15);
+            overflow: hidden;
+            padding: 2rem 2rem 2.5rem 2rem;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 3px solid #e9eef2;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.8rem;
+        }
+
+        h1 span {
+            background: #0b2b4a;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 400;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            margin-left: 1rem;
+        }
+
+        .subtitle {
+            color: #334155;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            background: #f0f4f9;
+            padding: 0.8rem 1.5rem;
+            border-radius: 60px;
+            display: inline-block;
+        }
+
+        /* 图片网格 — 按照编号1~8顺序展示 */
+        .gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        .figure-card {
+            background: #ffffff;
+            border: 1px solid #dee7ef;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.02);
+            transition: all 0.15s ease;
+        }
+
+        .figure-card:hover {
+            box-shadow: 0 18px 30px -12px rgba(0,55,100,0.2);
+            border-color: #bcd0e2;
+        }
+
+        .figure-header {
+            display: flex;
+            align-items: baseline;
+            background: #f8fafd;
+            padding: 0.8rem 2rem;
+            border-bottom: 1px solid #dde5ed;
+            font-weight: 500;
+        }
+
+        .figure-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1c4e7c;
+            margin-right: 1rem;
+            background: white;
+            width: 2.8rem;
+            height: 2.8rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 2px solid #b9d0e5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .figure-title {
+            font-size: 1.5rem;
+            color: #0f2b40;
+            font-weight: 600;
+        }
+
+        .figure-caption {
+            margin-left: auto;
+            font-size: 0.95rem;
+            color: #58738c;
+            background: #e2eaf3;
+            padding: 0.25rem 1.1rem;
+            border-radius: 30px;
+        }
+
+        .image-wrapper {
+            padding: 1.8rem 2.5rem;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 280px;
+        }
+
+        .image-wrapper img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 16px;
+            border: 1px solid #d2dfeb;
+            background: #fbfdff;
+            transition: transform 0.2s;
+            box-shadow: 0 6px 12px -6px rgba(0, 35, 70, 0.12);
+        }
+
+        .image-wrapper img:hover {
+            transform: scale(1.01);
+        }
+
+        /* 表格样式（用于第一张图的数据——可选项，但我们已经包含原图，直接显示图片即可） */
+        .data-note {
+            background: #f1f6fc;
+            margin: 1rem 2.5rem 2rem 2.5rem;
+            padding: 1.2rem 1.8rem;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            border-left: 6px solid #567e9f;
+            color: #1a374d;
+        }
+
+        .data-note code {
+            background: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            border: 1px solid #b9cbd9;
+        }
+
+        hr {
+            margin: 1rem 0;
+            border: none;
+            border-top: 2px dashed #c7d8e5;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: #637e98;
+            font-size: 0.95rem;
+            border-top: 1px solid #d9e2ec;
+            padding-top: 2rem;
+        }
+
+        .footer a {
+            color: #1e5681;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* 移动端优化 */
+        @media (max-width: 700px) {
+            body { padding: 1rem; }
+            .container { padding: 1.2rem; }
+            h1 { font-size: 1.8rem; }
+            .figure-header { flex-wrap: wrap; }
+            .figure-title { font-size: 1.2rem; }
+            .image-wrapper { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>
+        📊 Run result · 路径分析综合报告
+        <span>8张图表</span>
+    </h1>
+    <div class="subtitle">
+        ⚡ 基于Pareto多目标优化 · 起点 [1 2 5] → 终点 [36 419]  · 距离点至线路 45.63m
+    </div>
+
+    <!-- 按照图片编号1~8顺序展示 -->
+    <div class="gallery">
+
+        <!-- 1.png  Route Analysis Report 表格图 -->
+        <div class="figure-card">
+            <div class="figure-header">
+                <span class="figure-number">1</span>
+                <span class="figure-title">Route Analysis Report · 基础参数</span>
+                <span class="figure-caption">起点/终点 & 路径指标表</span>
+            </div>
+            <div class="image-wrapper">
+                <img src="1.png" alt="Route Analysis Report - 表格数据" loading="lazy">
+            </div>
+            <div class="data-note">
+                <strong>🔎 摘要：</strong> 起点“1 2 5” → 终点“36 419” ，距离点至线路45.63m。10条Pareto路径对比：总成本最优为<strong>Path1 (19.75)</strong>，路径长度最优Path5 (48.284km) ，风险成本最优Path1 ，能耗最优Path2 (19.713) 。转弯>45°次数等详细指标见表。
+            </div>
+        </div>
+
+        <!-- 2.png  三维障碍物 / 威胁区 / 候选路径 -->
+        <div class="figure-card">
+            <div class="figure-header">
+                <span class="figure-number">2</span>
+                <span class="figure-title">三维环境 · 障碍物与候选路径</span>
+                <span class="figure-caption">起始点 · 目标点 · 威胁区</span>
+            </div>
+            <div class="image-wrapper">
+                <img src="2.png" alt="三维障碍物威胁区候选路径" loading="lazy">
+            </div>
+            <div class="data-note">
+                🌍 示意三维空间：红色/蓝色标记起始点与目标点，灰色半透明体表示威胁区/禁入区，白色曲线为生成的候选路径（基于三维航迹规划）。
+            </div>
+        </div>
+
+        <!-- 3.png  总成本（越小越优） -->
+        <div class="figure-card">
+            <div class="figure-header">
+                <span class="figure-number">3</span>
+                <span class="figure-title">总成本 · Pareto路径对比</span>
+                <span class="figure-caption">最优 Pareto11 = 19.75</span>
+            </div>
+            <div class="image-wrapper">
+                <img src="3.png" alt="总成本分析 越小越优" loading="lazy">
+            </div>
+            <div class="data-note">
+                📉 纵轴“总成本”，横轴Pareto路径编号1~10。图中标注最优值为19.75 (Path1) ，柱状分布显示路径1、2成本较低，路径9、10成本较高。
+            </div>
+        </div>
+
+        <!-- 4.png  时间成本（越小越优） -->
+        <div class="figure-card">
+            <div class="figure-header">
+                <span class="figure-number">4</span>
+                <span class="figure-title">时间成本 · 路径耗时对比</span>
+                <span class="figure-caption">最优 Path5 等</span>
+            </div>
+            <div class="image-wrapper">
+                <img src="4.png" alt="时间成本分析" loading="lazy">
+            </div>
+            <div class="data-note">
+                ⏱️ 时间成本(越小越优)。多数路径时间成本接近48.42左右，最优值对应Path5（表中加粗标识48.4235）。图例编号1~10清晰显示。
+            </div>
+        </div>
+
+        <!-- 5.png  平滑成本（越小越优） -->
+        <div class="figure-card">
+            <div class="figure-header">
+                <span class="figure-number">5</span>
+                <span class="figure-title">平滑成本 · 转弯/爬升平滑代价</span>
+                <span class="figure-caption">最优 Path1 = 0.000</span>
+            </div>
+            <div class="image-wrapper">
+                <img src="5.png" alt="平滑成本 越小越优" loading="lazy">
+            </div>
+            <div class="data-note">
+                🌀 平滑代价: Path1、Path3、Path8等为0.000 (最优) 。部分路径平滑代价非零，反映转弯角度或高度变化的惩罚。
+            </div>
+        </div>
+
+        <!-- 6.png  能耗成本（越小越优） -->
+        <div class="figure-card">
+            <div class="figure-header">
+                <span class="figure-number">6</span>
+                <span class="figure-title">能耗成本 · 单位元</span>
+                <span class="figure-caption">最优 Path2 = 19.713</span>
+            </div>
+            <div class="image-wrapper">
+                <img src="6.png" alt="能耗成本分析" loading="lazy">
+            </div>
+            <div class="data-note">
+                ⚡ 橙色柱状为能耗成本，绿色条标示最优Path2 (19.713元)。Path1能耗略高(19.753)，Path9、10能耗显著上升。
+            </div>
+        </div>
+
+        <!-- 7.png  风险成本（越小越优） -->
+        <div class="figure-card">
+            <div class="figure-header">
+                <span class="figure-number">7</span>
+                <span class="figure-title">风险成本 · 威胁代价</span>
+                <span class="figure-caption">最优 Path1 / Path3 / Path8 / Path9</span>
+            </div>
+            <div class="image-wrapper">
+                <img src="7.png" alt="风险成本分析" loading="lazy">
+            </div>
+            <div class="data-note">
+                ⚠️ 风险代价: 路径1,3,8,9风险为0，为最优；路径5风险最高(0.9255)。图中纵轴为风险代价，编号1~10分布。
+            </div>
+        </div>
+
+        <!-- 8.png  路径长度（越小越优） -->
+        <div class="figure-card">
+            <div class="figure-header">
+                <span class="figure-number">8</span>
+                <span class="figure-title">路径长度 · 长度代价</span>
+                <span class="figure-caption">最优 Path5 = 48.284</span>
+            </div>
+            <div class="image-wrapper">
+                <img src="8.png" alt="路径长度分析" loading="lazy">
+            </div>
+            <div class="data-note">
+                📏 长度代价对比：最优Path5为48.284km（图中标注）。除Path1略高(48.38)及Path10不完整外，其余路径长度均为48.2835左右。
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 附注表格关键信息总结（来自第一张图） -->
+    <hr>
+    <div style="background: #f0f7fe; border-radius: 24px; padding: 1.5rem 2rem; margin-top: 1.5rem;">
+        <h3 style="display: flex; align-items: center; gap: 0.8rem; font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem;">
+            📋 图8 Route Analysis Report · 关键数据
+        </h3>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.03);">
+                <thead style="background: #2b4b6f; color: white;">
+                    <tr>
+                        <th style="padding: 12px 15px;">指标</th><th>Path1</th><th>Path2</th><th>Path3</th><th>Path4</th><th>Path5</th><th>Path6</th><th>Path7</th><th>Path8</th><th>Path9</th><th>Path10</th><th>最优</th>
+                    </tr>
+                </thead>
+                <tbody style="text-align: center; font-size: 0.95rem;">
+                    <tr><td>总成本</td><td>19.752</td><td>20.771</td><td>26.210</td><td>39.657</td><td>42.410</td><td>43.181</td><td>49.378</td><td>52.454</td><td>86.147</td><td>106.055</td><td>Path1</td></tr>
+                    <tr><td>路径长度(km)</td><td>48.380</td><td>48.284</td><td>48.284</td><td>48.284</td><td>48.284</td><td>48.284</td><td>48.284</td><td>48.284</td><td>48.284</td><td>-</td><td>Path5</td></tr>
+                    <tr><td>风险成本</td><td>0.000</td><td>0.462</td><td>0.000</td><td>0.026</td><td>0.926</td><td>0.024</td><td>0.355</td><td>0.000</td><td>0.000</td><td>0.153</td><td>Path1</td></tr>
+                    <tr><td>能耗成本</td><td>19.753</td><td>19.713</td><td>26.210</td><td>39.631</td><td>37.484</td><td>42.361</td><td>49.023</td><td>52.454</td><td>86.147</td><td>105.902</td><td>Path2</td></tr>
+                    <tr><td>平均成本</td><td>0.000</td><td>0.595</td><td>0.000</td><td>0.000</td><td>0.000</td><td>0.797</td><td>0.000</td><td>0.000</td><td>0.100</td><td>0.000</td><td>Path1</td></tr>
+                    <tr><td>时间成本</td><td>48.520</td><td>48.424</td><td>48.424</td><td>48.424</td><td>48.424</td><td>48.424</td><td>48.424</td><td>48.424</td><td>48.424</td><td>-</td><td>Path5</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p style="margin-top: 1.3rem; color: #20507a; font-size: 0.98rem; background: #ddeeff; padding: 0.8rem; border-radius: 50px; display: inline-block;">
+            ✅ 转弯>45度次数最少：Path3/5/7/9/10 (2次) ；最大转弯角度多数为45°或54.7°；上升/下降高度均接近4.0。
+        </p>
+    </div>
+
+    <div class="footer">
+        ⚙️ 基于三维航迹多目标Pareto优化 · 报告生成 <strong>Run result</strong> · 图片按顺序 1~8 展示<br>
+        <span style="opacity: 0.7;">📁 图表数据源自 Figure 8 及成本分析 · GitHub 展示页</span>
+    </div>
+</div>
+<!-- 说明：所有图片均使用相对路径 (1.png ~ 8.png)，请确保图片位于相同目录下。 -->
+</body>
+</html>
