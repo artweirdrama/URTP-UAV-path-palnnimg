@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>无人机算法仿真平台 | 多机协同三维轨迹规划</title>
+  <!-- 字体与图标库 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 2rem;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #0b0f1c;
+      color: #e2e8f0;
+      line-height: 1.5;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* 动态科技背景 */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 180, 255, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 180, 255, 0.06) 1px, transparent 1px);
+      background-size: 48px 48px;
+      background-position: center center;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      top: -10%;
+      left: 5%;
+      width: 90%;
+      height: 80%;
+      background: radial-gradient(circle at 40% 30%, rgba(0, 200, 255, 0.08) 0%, rgba(10, 25, 55, 0) 70%);
+      filter: blur(70px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .container {
+      position: relative;
+      z-index: 5;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem 1.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    /* ---------- 主页横幅 ---------- */
+    .hero-banner {
+      background: rgba(15, 22, 40, 0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(0, 180, 255, 0.3);
+      border-radius: 3.5rem;
+      box-shadow: 0 25px 50px -10px rgba(0,0,0,0.8), 0 0 0 1px rgba(0, 160, 255, 0.25);
+      padding: 3rem 2rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 8vw, 4rem);
+      font-weight: 700;
+      background: linear-gradient(to right, #b3e5ff, #48cae4, #90e0ef);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 0.02em;
+      text-shadow: 0 0 20px rgba(0,180,255,0.5);
+    }
+
+    .hero-sub {
+      font-size: 1.25rem;
+      color: #adb9d3;
+      max-width: 700px;
+      margin-top: -0.5rem;
+    }
+
+    /* 快速入口卡片组 */
+    .quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .quick-link {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(72, 190, 240, 0.4);
+      border-radius: 2.5rem;
+      padding: 0.8rem 2rem;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #d1e6ff;
+      text-decoration: none;
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      letter-spacing: 0.3px;
+    }
+
+    .quick-link i {
+      font-size: 1.1rem;
+      color: #48cae4;
+    }
+
+    .quick-link:hover {
+      background: rgba(0, 180, 255, 0.18);
+      border-color: #48cae4;
+      color: white;
+      box-shadow: 0 0 20px rgba(0,180,255,0.4);
+      transform: translateY(-2px);
+    }
+
+    /* 通用板块样式 */
+    .section-card {
+      background: rgba(18, 25, 45, 0.7);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(72, 160, 240, 0.25);
+      border-radius: 2.5rem;
+      padding: 2.2rem 2rem;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+      transition: transform 0.2s;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 650;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 1px solid rgba(72, 190, 240, 0.4);
+      padding-bottom: 0.7rem;
+      color: #e0f0ff;
+    }
+
+    .section-title i {
+      color: #48cae4;
+      font-size: 1.9rem;
+    }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.8rem;
+      margin-top: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.2rem 0;
+      background: rgba(0, 20, 40, 0.5);
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+
+    th {
+      background: rgba(0, 160, 255, 0.2);
+      color: #b3e0ff;
+      font-weight: 600;
+      padding: 0.8rem;
+      text-align: left;
+    }
+
+    td, th {
+      padding: 0.7rem 1rem;
+      border-bottom: 1px solid rgba(72, 160, 240, 0.25);
+    }
+
+    .badge {
+      background: #0b2b44;
+      color: #9ad6ff;
+      border-radius: 2rem;
+      padding: 0.2rem 0.9rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .img-placeholder {
+      background: rgba(0, 40, 70, 0.5);
+      border: 2px dashed #2c7da0;
+      border-radius: 1.5rem;
+      padding: 1.8rem;
+      text-align: center;
+      color: #a0c4e6;
+      font-weight: 500;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.7rem;
+      margin: 1rem 0;
+    }
+
+    .img-placeholder i {
+      font-size: 2.5rem;
+      color: #48cae4;
+    }
+
+    .code-block {
+      background: #0a101f;
+      border-radius: 1.2rem;
+      padding: 1.2rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      color: #bdd3f0;
+      border-left: 4px solid #0077be;
+      margin: 1rem 0;
+    }
+
+    .download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #0a2740;
+      padding: 0.8rem 2rem;
+      border-radius: 2.5rem;
+      color: #cce5ff;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.2s;
+      border: 1px solid #2c7da0;
+    }
+
+    .download-link:hover {
+      background: #0f3b5c;
+      border-color: #48cae4;
+      color: white;
+    }
+
+    footer {
+      text-align: center;
+      color: #7f95b5;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 650px) {
+      .container {
+        padding: 1rem;
+      }
+      .hero-title {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- ******************** 一、主页 ******************** -->
+    <section id="home" class="hero-banner">
+      <h1 class="hero-title">无人机算法仿真平台</h1>
+      <p class="hero-sub">无人机协同路径规划 · 集成多类优化算法仿真平台</p>
+      <div class="quick-links">
+        <a href="#project-intro" class="quick-link"><i class="fas fa-info-circle"></i> 项目简介</a>
+        <a href="#algorithm-system" class="quick-link"><i class="fas fa-microchip"></i> 算法体系</a>
+        <a href="#simulation-demo" class="quick-link"><i class="fas fa-play-circle"></i> 仿真演示</a>
+        <a href="#download-ref" class="quick-link"><i class="fas fa-download"></i> 源代码与参考</a>
+      </div>
+    </section>
+
+    <!-- ******************** 二、项目简介 ******************** -->
+    <section id="project-intro" class="section-card">
+      <h2 class="section-title"><i class="fas fa-project-diagram"></i> 项目简介</h2>
+      
+      <h3 style="color:#b3e0ff; margin-top:1rem;">1. 项目概述</h3>
+      <p>本项目实现了一套面向城市环境的多无人机协同三维轨迹规划系统。系统能够在包含建筑物障碍物和威胁区域的复杂城市空间中，为多架无人机自动生成从各自起点到共同目标的无碰撞、平滑可飞行、协同分散的连续三维轨迹。</p>
+      
+      <h3 style="color:#b3e0ff; margin-top:1.8rem;">2. 核心问题与解决方案</h3>
+      <p><strong>2.1 面临的核心挑战</strong></p>
+      <table>
+        <tr><th>挑战</th><th>描述</th></tr>
+        <tr><td>高维空间</td><td>三维连续空间规划，计算复杂度高</td></tr>
+        <tr><td>多机协同</td><td>多架无人机需共用空域，避免路径过度集中</td></tr>
+        <tr><td>障碍物规避</td><td>城市建筑密集，需安全绕行</td></tr>
+        <tr><td>可飞行性</td><td>路径需平滑连续，符合无人机运动学约束</td></tr>
+        <tr><td>鲁棒性</td><td>任意起点终点组合均需有解</td></tr>
+      </table>
+      
+      <p><strong>2.2 核心解决方案</strong></p>
+      <p>采用分层解耦加枚举搜索加多级保底的技术路线：</p>
+      <ul style="margin-left:1.5rem; list-style-type: disc; color:#cbd5e1;">
+        <li><strong>维度解耦</strong>：三维问题分解为二维水平路径与垂直高度剖面优化。</li>
+        <li><strong>多策略搜索</strong>：多清空半径、多控制参数变体枚举寻找最优方案。</li>
+        <li><strong>可见性图</strong>：基于膨胀障碍物构建可见性图全局搜索。</li>
+        <li><strong>协同机制</strong>：路径共享代价函数实现多机自然分散。</li>
+        <li><strong>平滑处理</strong>：贝塞尔曲线圆角平滑，符合运动学约束。</li>
+        <li><strong>多层保底</strong>：三层应急机制确保任意场景有解。</li>
+      </ul>
+
+      <h3 style="color:#b3e0ff; margin-top:1.8rem;">3. 系统工作流程</h3>
+      <p>环境预处理 → 自适应策略选择 → 多候选路径生成 → 综合评分与最优选择 → 路径平滑与高度优化 → 输出三维可飞行轨迹及性能报告。</p>
+      
+      <h3 style="color:#b3e0ff; margin-top:1.8rem;">4. 技术特色</h3>
+      <p><span class="badge">多清空半径枚举</span> <span class="badge">多层协同机制</span> <span class="badge">自适应调参</span> <span class="badge">混合节点图</span> <span class="badge">防碰撞圆角</span> <span class="badge">三层保底机制</span></p>
+      <table>
+        <tr><th>参数</th><th>数值</th></tr>
+        <tr><td>地图规模</td><td>110×100×32 网格</td></tr>
+        <tr><td>无人机数量</td><td>最多8架</td></tr>
+        <tr><td>飞行高度范围</td><td>3至28单位</td></tr>
+        <tr><td>安全清空半径</td><td>0至1.6可调</td></tr>
+        <tr><td>平滑半径</td><td>最大3.0单位</td></tr>
+        <tr><td>单机规划时间</td><td>约2至5秒（MATLAB环境）</td></tr>
+      </table>
+
+      <h3 style="color:#b3e0ff;">5. 代码结构</h3>
+      <div class="code-block">
+        run_multi_uav_continuous_planner · planContinuousMultiUAV · planOneContinuousRoute<br>
+        visibilityGraphRoute · roundedPolyline · lowClimbProfile · emergencyHighRoute3D
+      </div>
+      <p><strong>6. 项目价值：</strong>工程可部署的城市多无人机协同规划解决方案，平衡算法复杂度与路径质量。</p>
+    </section>
+
+    <!-- ******************** 三、算法体系 ******************** -->
+    <section id="algorithm-system" class="section-card">
+      <h2 class="section-title"><i class="fas fa-cogs"></i> 算法体系</h2>
+      <p><strong>整体流程：</strong>场景构建与环境预处理 → 自适应策略选择 → 多候选路径生成 → 路径评分与最优选择 → 圆角平滑+低爬升高度剖面 → 三维路径生成与指标评估 → 可视化与动画</p>
+      
+      <div class="grid-2col">
+        <div><strong>模块1：环境构建</strong> <code>buildContinuousEnvironment</code> 二值化建筑、高度图、膨胀障碍、威胁场、距离场。</div>
+        <div><strong>模块2：多候选路径生成</strong> <code>planOneContinuousRoute</code> 枚举清空半径(1.6~0.0)与控制变体，构建可见性图+Dijkstra。</div>
+        <div><strong>模块3：可见性图搜索</strong> 角点+稀疏网格节点，边代价融合清空/威胁/共享权重。</div>
+        <div><strong>模块4：冗余去除</strong> <code>removeRedundantVertices</code> 视线剪枝算法精简控制点。</div>
+        <div><strong>模块5：圆角平滑</strong> <code>roundedPolyline</code> 贝塞尔曲线B(t)=(1-t)²P₀+2(1-t)tP₁+t²P₂，碰撞检测。</div>
+        <div><strong>模块6：多机协同</strong> 共享代价 exp(-最小距离/5.0)，自然分散。</div>
+        <div><strong>模块7：高度剖面</strong> <code>lowClimbProfile</code> 基础巡航7.0+威胁调整+移动平滑，范围3-28。</div>
+        <div><strong>模块8：应急机制</strong> 边界走廊→BFS网格搜索→高空飞越三段式保底。</div>
+      </div>
+
+      <!-- 算法流程图图片占位 -->
+      <div style="margin-top:2rem; text-align: center;">
+        <img src="images/algorithm-flow.png" alt="算法流程图" style="max-width:100%; border-radius:1.2rem; box-shadow:0 10px 25px rgba(0,0,0,0.5);">
+        <p style="color:#7f95b5; margin-top:0.5rem;">📊 算法流程图</p>
+      </div>
+    </section>
+
+    <!-- ******************** 四、仿真演示 ******************** -->
+    <section id="simulation-demo" class="section-card">
+      <h2 class="section-title"><i class="fas fa-laptop-code"></i> 仿真演示</h2>
+      <p><strong>1. 选择预输入地图与无人机参数 / 手动输入地图与无人机参数（当前展示预输入）</strong></p>
+      <div style="text-align: center; margin:1rem 0;">
+        <img src="images/params-input.png" alt="参数输入示例" style="max-width:100%; border-radius:1.2rem; box-shadow:0 10px 25px rgba(0,0,0,0.5);">
+        <p style="color:#7f95b5; margin-top:0.5rem;">📥 参数输入界面</p>
+      </div>
+      
+      <p style="margin-top:1.5rem;"><strong>2. 仿真结果示例</strong></p>
+      <div style="text-align: center; margin:1rem 0;">
+        <img src="images/simulation-result.png" alt="仿真结果对比" style="max-width:100%; border-radius:1.2rem; box-shadow:0 10px 25px rgba(0,0,0,0.5);">
+        <p style="color:#7f95b5; margin-top:0.5rem;">🚁 路径代价对比 · 三维轨迹可视化</p>
+      </div>
+    </section>
+
+    <!-- ******************** 五、源代码下载与参考资料链接 ******************** -->
+    <section id="download-ref" class="section-card">
+      <h2 class="section-title"><i class="fas fa-code-branch"></i> 源代码下载与参考资料链接</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; margin-top: 1rem;">
+        <a href="https://github.com/artweirdrama/URTP-UAV-path-palnnimg/blob/main/run_multi_uav_continuous_planner.m" target="_blank" rel="noopener noreferrer" class="download-link">
+          <i class="fab fa-github"></i> 项目代码 (run_multi_uav_continuous_planner.m)
+        </a>
+        <span style="color:#94a3b8;">其他参考：相关文献与算法说明</span>
+      </div>
+      <p style="margin-top:1.5rem; color:#94a3b8;">
+        <i class="fas fa-external-link-alt"></i> 链接地址：<br>
+        <code>https://github.com/artweirdrama/URTP-UAV-path-palnnimg/blob/main/run_multi_uav_continuous_planner.m</code>
+      </p>
+    </section>
+    
+    <footer>
+      <p>© 2025 无人机算法仿真平台 · 多无人机协同三维轨迹规划</p>
+    </footer>
+  </div>
+</body>
+</html>
