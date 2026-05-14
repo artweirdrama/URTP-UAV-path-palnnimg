@@ -330,19 +330,20 @@
       border-radius: 1.2rem;
     }
 
-    /* 算法流程图容器，使其更贴合页面宽度 */
+    /* 算法流程图容器 - 调整为与段落等宽，并适当放大 */
     .algo-flowchart-container {
-      max-width: 100%;
-      margin: 0 auto;
+      width: 100%;
+      margin: 2.5rem auto 0.5rem;
       text-align: center;
     }
     .algo-flowchart-container img {
       width: 100%;
       height: auto;
-      max-height: 450px;
+      max-height: 550px; /* 增加最大高度，使图片更突出 */
       object-fit: contain;
       border-radius: 1.2rem;
       box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      display: block;
     }
 
     .ref-link-group {
@@ -350,7 +351,7 @@
       flex-wrap: wrap;
       gap: 0.8rem;
       align-items: center;
-      margin-top: 0.8rem;
+      margin-top: 0.5rem;
       margin-bottom: 1rem;
     }
     .ref-link-item {
@@ -377,6 +378,15 @@
       text-decoration: none;
     }
 
+    /* 参考资料标题独立成行样式 */
+    .ref-title-row {
+      display: block;
+      margin: 1.2rem 0 0.4rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      font-size: 1.1rem;
+    }
+
     footer {
       text-align: center;
       color: #7f95b5;
@@ -398,7 +408,7 @@
         max-height: 200px;
       }
       .algo-flowchart-container img {
-        max-height: 320px;
+        max-height: 380px;
       }
     }
   </style>
@@ -487,8 +497,8 @@
         <div><strong>模块8：应急机制</strong> 边界走廊→BFS网格搜索→高空飞越三段式保底。</div>
       </div>
 
-      <!-- 算法流程图图片 - 调整为与页面更融合的大小 -->
-      <div style="margin-top:2.5rem;" class="algo-flowchart-container">
+      <!-- 算法流程图图片 - 放大至与段落等宽 -->
+      <div class="algo-flowchart-container">
         <img src="算法流程图.png" alt="算法流程图" loading="lazy">
         <p style="color:#7f95b5; margin-top:0.8rem; font-size:0.95rem;">📊 算法流程图</p>
       </div>
@@ -551,13 +561,16 @@
     <!-- ******************** 五、源代码下载与参考资料链接 ******************** -->
     <section id="download-ref" class="section-card">
       <h2 class="section-title"><i class="fas fa-code-branch"></i> 源代码下载与参考资料链接</h2>
-      <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; margin-top: 1rem; margin-bottom: 0.5rem;">
+      <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; margin-top: 1rem; margin-bottom: 0.2rem;">
         <a href="https://github.com/artweirdrama/URTP-UAV-path-palnnimg/blob/main/run_multi_uav_continuous_planner.m" target="_blank" rel="noopener noreferrer" class="download-link">
           <i class="fab fa-github"></i> 项目代码 (run_multi_uav_continuous_planner.m)
         </a>
-        <span style="color:#cbd5e1; font-weight: 500;">📚 其它参考资料</span>
       </div>
       
+      <!-- 将“其它参考资料”单独放置于新行 -->
+      <div class="ref-title-row">
+        📚 其它参考资料
+      </div>
       <div class="ref-link-group">
         <a href="https://github.com/artweirdrama/URTP-UAV-path-palnnimg/tree/main/HCRS-UAV-PathPlanning-main" target="_blank" rel="noopener" class="ref-link-item">
           <i class="fab fa-github"></i> HCRS-UAV-PathPlanning
