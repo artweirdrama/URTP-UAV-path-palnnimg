@@ -321,7 +321,7 @@
     }
 
     /* 对已有的其他演示图片也进行尺寸限制，保持全站图片和谐 */
-    .section-card img:not(.map-figure img) {
+    .section-card img:not(.map-figure img):not(.algo-flowchart-img) {
       max-width: 100%;
       max-height: 360px;
       width: auto;
@@ -330,20 +330,24 @@
       border-radius: 1.2rem;
     }
 
-    /* 算法流程图容器 - 调整为与段落等宽，并适当放大 */
+    /* 算法流程图容器 - 宽度与单行段落完全一致 */
     .algo-flowchart-container {
       width: 100%;
       margin: 2.5rem auto 0.5rem;
       text-align: center;
     }
-    .algo-flowchart-container img {
+    
+    /* 算法流程图图片 - 等比例放大至与段落同宽 */
+    .algo-flowchart-img {
+      display: block;
       width: 100%;
       height: auto;
-      max-height: 550px; /* 增加最大高度，使图片更突出 */
-      object-fit: contain;
+      max-width: 100%;
       border-radius: 1.2rem;
       box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-      display: block;
+      object-fit: contain;
+      background: #081724;
+      border: 1px solid rgba(72, 170, 240, 0.4);
     }
 
     .ref-link-group {
@@ -406,9 +410,6 @@
       }
       .map-figure img {
         max-height: 200px;
-      }
-      .algo-flowchart-container img {
-        max-height: 380px;
       }
     }
   </style>
@@ -497,9 +498,9 @@
         <div><strong>模块8：应急机制</strong> 边界走廊→BFS网格搜索→高空飞越三段式保底。</div>
       </div>
 
-      <!-- 算法流程图图片 - 放大至与段落等宽 -->
+      <!-- 算法流程图图片 - 等比例放大至与单行段落宽度相等 -->
       <div class="algo-flowchart-container">
-        <img src="算法流程图.png" alt="算法流程图" loading="lazy">
+        <img src="算法流程图.png" alt="算法流程图" class="algo-flowchart-img" loading="lazy">
         <p style="color:#7f95b5; margin-top:0.8rem; font-size:0.95rem;">📊 算法流程图</p>
       </div>
     </section>
