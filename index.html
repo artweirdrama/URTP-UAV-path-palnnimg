@@ -255,6 +255,8 @@
       text-decoration: none;
       transition: 0.2s;
       border: 1px solid #2c7da0;
+      margin-right: 1rem;
+      margin-bottom: 0.8rem;
     }
 
     .download-link:hover {
@@ -328,6 +330,53 @@
       border-radius: 1.2rem;
     }
 
+    /* 算法流程图容器，使其更贴合页面宽度 */
+    .algo-flowchart-container {
+      max-width: 100%;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .algo-flowchart-container img {
+      width: 100%;
+      height: auto;
+      max-height: 450px;
+      object-fit: contain;
+      border-radius: 1.2rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+
+    .ref-link-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      align-items: center;
+      margin-top: 0.8rem;
+      margin-bottom: 1rem;
+    }
+    .ref-link-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #9ad6ff;
+      text-decoration: none;
+      font-size: 0.95rem;
+      background: rgba(0, 160, 255, 0.15);
+      padding: 0.4rem 1.2rem;
+      border-radius: 2rem;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+    .ref-link-item i {
+      font-size: 0.9rem;
+      color: #48cae4;
+    }
+    .ref-link-item:hover {
+      background: rgba(0, 180, 255, 0.25);
+      border-color: #48cae4;
+      color: white;
+      text-decoration: none;
+    }
+
     footer {
       text-align: center;
       color: #7f95b5;
@@ -348,6 +397,9 @@
       .map-figure img {
         max-height: 200px;
       }
+      .algo-flowchart-container img {
+        max-height: 320px;
+      }
     }
   </style>
 </head>
@@ -356,7 +408,7 @@
     <!-- ******************** 一、主页 ******************** -->
     <section id="home" class="hero-banner">
       <h1 class="hero-title">无人机算法仿真平台</h1>
-            <p class="hero-sub" style="background: linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 700; font-size: 1.4rem; text-shadow: none; filter: drop-shadow(0 0 12px rgba(255, 180, 0, 0.5));">
+      <p class="hero-sub" style="background: linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 700; font-size: 1.4rem; text-shadow: none; filter: drop-shadow(0 0 12px rgba(255, 180, 0, 0.5));">
         强化学习与人工旅鼠算法融合的无人机路径规划研究
       </p>
       <div class="quick-links">
@@ -435,10 +487,10 @@
         <div><strong>模块8：应急机制</strong> 边界走廊→BFS网格搜索→高空飞越三段式保底。</div>
       </div>
 
-      <!-- 算法流程图图片占位 -->
-      <div style="margin-top:2rem; text-align: center;">
-        <img src="算法流程图.png" alt="算法流程图" style="max-width:100%; border-radius:1.2rem; box-shadow:0 10px 25px rgba(0,0,0,0.5);">
-        <p style="color:#7f95b5; margin-top:0.5rem;">📊 算法流程图</p>
+      <!-- 算法流程图图片 - 调整为与页面更融合的大小 -->
+      <div style="margin-top:2.5rem;" class="algo-flowchart-container">
+        <img src="算法流程图.png" alt="算法流程图" loading="lazy">
+        <p style="color:#7f95b5; margin-top:0.8rem; font-size:0.95rem;">📊 算法流程图</p>
       </div>
     </section>
 
@@ -447,19 +499,19 @@
       <h2 class="section-title"><i class="fas fa-laptop-code"></i> 仿真演示</h2>
       <p><strong>1. 选择预输入地图与无人机参数 / 手动输入地图与无人机参数（当前展示预输入）</strong></p>
       <div style="text-align: center; margin:1rem 0;">
-        <img src="params-input.png" alt="参数输入示例" style="max-width:100%; border-radius:1.2rem; box-shadow:0 10px 25px rgba(0,0,0,0.5);">
+        <img src="params-input.png" alt="参数输入示例" loading="lazy" style="max-width:100%; border-radius:1.2rem; box-shadow:0 10px 25px rgba(0,0,0,0.5);">
         <p style="color:#7f95b5; margin-top:0.5rem;">📥 参数输入界面</p>
       </div>
       
       <p style="margin-top:1.5rem;"><strong>2. 仿真结果示例</strong></p>
       <div style="text-align: center; margin:1rem 0;">
-        <img src="simulation-result.png" alt="仿真结果对比" style="max-width:100%; border-radius:1.2rem; box-shadow:0 10px 25px rgba(0,0,0,0.5);">
+        <img src="simulation-result.png" alt="仿真结果对比" loading="lazy" style="max-width:100%; border-radius:1.2rem; box-shadow:0 10px 25px rgba(0,0,0,0.5);">
         <p style="color:#7f95b5; margin-top:0.5rem;">🚁 三维轨迹可视化</p>
       </div>
 
       <p style="margin-top:2rem;"><strong>3. 无人机路径代价对比示例图片</strong></p>
       <div style="text-align: center; margin:1rem 0;">
-        <img src="comparison-cost.png" alt="无人机路径代价对比" style="max-width:100%; border-radius:1.2rem; box-shadow:0 10px 25px rgba(0,0,0,0.5);">
+        <img src="comparison-cost.png" alt="无人机路径代价对比" loading="lazy" style="max-width:100%; border-radius:1.2rem; box-shadow:0 10px 25px rgba(0,0,0,0.5);">
         <p style="color:#7f95b5; margin-top:0.5rem;">📊 多无人机路径代价量化对比</p>
       </div>
     </section>
@@ -499,15 +551,31 @@
     <!-- ******************** 五、源代码下载与参考资料链接 ******************** -->
     <section id="download-ref" class="section-card">
       <h2 class="section-title"><i class="fas fa-code-branch"></i> 源代码下载与参考资料链接</h2>
-      <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; margin-top: 1rem;">
+      <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center; margin-top: 1rem; margin-bottom: 0.5rem;">
         <a href="https://github.com/artweirdrama/URTP-UAV-path-palnnimg/blob/main/run_multi_uav_continuous_planner.m" target="_blank" rel="noopener noreferrer" class="download-link">
           <i class="fab fa-github"></i> 项目代码 (run_multi_uav_continuous_planner.m)
         </a>
-        <span style="color:#94a3b8;">其他参考：相关文献与算法说明</span>
+        <span style="color:#cbd5e1; font-weight: 500;">📚 其它参考资料</span>
       </div>
-      <p style="margin-top:1.5rem; color:#94a3b8;">
-        <i class="fas fa-external-link-alt"></i> 链接地址：<br>
+      
+      <div class="ref-link-group">
+        <a href="https://github.com/artweirdrama/URTP-UAV-path-palnnimg/tree/main/HCRS-UAV-PathPlanning-main" target="_blank" rel="noopener" class="ref-link-item">
+          <i class="fab fa-github"></i> HCRS-UAV-PathPlanning
+        </a>
+        <a href="https://github.com/artweirdrama/URTP-UAV-path-palnnimg/tree/main/DroneDetour-main" target="_blank" rel="noopener" class="ref-link-item">
+          <i class="fab fa-github"></i> DroneDetour
+        </a>
+        <a href="https://github.com/artweirdrama/URTP-UAV-path-palnnimg/tree/main/UAV_Cooperative_Path_Planning-main" target="_blank" rel="noopener" class="ref-link-item">
+          <i class="fab fa-github"></i> UAV_Cooperative_Path_Planning
+        </a>
+      </div>
+      
+      <p style="margin-top:1.2rem; color:#94a3b8;">
+        <i class="fas fa-external-link-alt"></i> 主项目链接地址：<br>
         <code>https://github.com/artweirdrama/URTP-UAV-path-palnnimg/blob/main/run_multi_uav_continuous_planner.m</code>
+      </p>
+      <p style="color:#7f95b5; margin-top:0.8rem; font-size:0.9rem;">
+        <i class="fas fa-book-open"></i> 相关文献与算法说明可参考上述仓库。
       </p>
     </section>
     
