@@ -263,6 +263,71 @@
       color: white;
     }
 
+    /* 新增多图展示样式 - 严格控制图片大小 */
+    .multi-map-gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      margin: 2rem 0 1rem;
+    }
+    .map-figure {
+      background: rgba(5, 15, 28, 0.65);
+      border-radius: 1.5rem;
+      padding: 1.2rem;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(72, 190, 240, 0.3);
+      transition: transform 0.2s ease;
+    }
+    .map-figure:hover {
+      transform: translateY(-4px);
+      border-color: #48cae4;
+      box-shadow: 0 12px 25px -10px rgba(0,180,255,0.2);
+    }
+    /* 关键修改：限制图片最大宽度和高度，避免过大尺寸 */
+    .map-figure img {
+      display: block;
+      max-width: 100%;
+      max-height: 240px;
+      width: auto;
+      height: auto;
+      margin: 0 auto;
+      border-radius: 1rem;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.5);
+      background: #081724;
+      border: 1px solid rgba(72, 170, 240, 0.4);
+      object-fit: contain;
+    }
+    .map-caption {
+      text-align: center;
+      margin-top: 0.8rem;
+      font-weight: 500;
+      color: #cae9ff;
+      font-size: 1rem;
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .map-caption i {
+      color: #4cc9f0;
+      font-size: 1.1rem;
+    }
+    hr {
+      border-color: rgba(72, 160, 240, 0.3);
+      margin: 0.5rem 0;
+    }
+
+    /* 对已有的其他演示图片也进行尺寸限制，保持全站图片和谐 */
+    .section-card img:not(.map-figure img) {
+      max-width: 100%;
+      max-height: 360px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 1.2rem;
+    }
+
     footer {
       text-align: center;
       color: #7f95b5;
@@ -276,6 +341,12 @@
       }
       .hero-title {
         font-size: 2.2rem;
+      }
+      .section-card {
+        padding: 1.5rem;
+      }
+      .map-figure img {
+        max-height: 200px;
       }
     }
   </style>
@@ -338,7 +409,7 @@
         <tr><td>安全清空半径</td><td>0至1.6可调</td></tr>
         <tr><td>平滑半径</td><td>最大3.0单位</td></tr>
         <tr><td>单机规划时间</td><td>约2至5秒（MATLAB环境）</td></tr>
-      </table>
+       </table>
 
       <h3 style="color:#b3e0ff;">5. 代码结构</h3>
       <div class="code-block">
@@ -392,35 +463,39 @@
         <p style="color:#7f95b5; margin-top:0.5rem;">📊 多无人机路径代价量化对比</p>
       </div>
     </section>
-        <section class="section-card" id="preset-maps">
+
+    <!-- ======================== 新增板块：其他预设地图二维示例 ======================== -->
+    <section class="section-card" id="preset-maps">
       <h2 class="section-title"><i class="fas fa-map-marked-alt"></i> 其他预设地图2维示例</h2>
       <div class="multi-map-gallery">
-        <!-- 图片1 -->
+        <!-- 图片1 max-height:240px -->
         <div class="map-figure">
           <img src="map_case_01_base_simple.png" alt="预设地图示例1" loading="lazy">
           <div class="map-caption">
-            <i class="fas fa-location-dot"></i> 示例一
+            <i class="fas fa-city"></i> 示例一
           </div>
         </div>
         <!-- 图片2 -->
         <div class="map-figure">
           <img src="map_case_02_base_medium.png" alt="预设地图示例2" loading="lazy">
           <div class="map-caption">
-            <i class="fas fa-chart-line"></i> 示例二
+            <i class="fas fa-industry"></i> 示例二
           </div>
         </div>
         <!-- 图片3 -->
         <div class="map-figure">
           <img src="map_case_03_base_complex.png" alt="预设地图示例3" loading="lazy">
           <div class="map-caption">
-            <i class="fas fa-mountain-city"></i> 示例三
+            <i class="fas fa-mountain"></i> 示例三
           </div>
         </div>
       </div>
       <p style="margin-top: 1rem; color:#94a3b8; font-size:0.9rem; border-left: 3px solid #48cae4; padding-left: 1rem;">
-        <i class="fas fa-info-circle"></i> 以上为内置典型城市场景二维栅格示意图，涵盖高密度建筑、不规则障碍、以及威胁源分布。系统可根据任意预设地图自适应规划协同轨迹。
+        <i class="fas fa-info-circle"></i> 以上为内置典型城市场景二维栅格示意图，涵盖高密度建筑、不规则障碍以及威胁源分布。系统可根据任意预设地图自适应规划协同轨迹。
       </p>
     </section>
+    <!-- ==================================================================================== -->
+
     <!-- ******************** 五、源代码下载与参考资料链接 ******************** -->
     <section id="download-ref" class="section-card">
       <h2 class="section-title"><i class="fas fa-code-branch"></i> 源代码下载与参考资料链接</h2>
